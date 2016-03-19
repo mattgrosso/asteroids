@@ -1,36 +1,28 @@
 (function gameSetup() {
     'use strict';
 
-    // Create your "ship" object and any other variables you might need...
 var ship = {
   velocity: 0,
   angle: 0,
   element: document.getElementById('ship')
 };
+
+var asteroidz = [];
+
 ship.element.style.top = "0px";
 ship.element.style.left = "0px";
-
+console.log(ship);
 
     ship.element.addEventListener('asteroidDetected', function (event) {
+      asteroidz.push(event.detail);
+      // console.log(asteroidz);
+
         // You can detect when a new asteroid appears with this event.
         // The new HTML element will be in event.detail
 
         // What might you need/want to do in here?
 
     });
-
-    /**
-     * Use this function to handle when a key is pressed. Which key? Use the
-     * event.keyCode property to know:
-     *
-     * 37 = left
-     * 38 = up
-     * 39 = right
-     * 40 = down
-     *
-     * @param  {Event} event   The "keyup" event object with a bunch of data in it
-     * @return {void}          In other words, no need to return anything
-     */
 
     function handleKeys(event) {
         console.log(event.keyCode);
@@ -69,8 +61,6 @@ ship.element.style.left = "0px";
     }
 
 
-    console.log(getShipMovement(2,50));
-
 
     document.querySelector('body').addEventListener('keyup', handleKeys);
 
@@ -81,30 +71,18 @@ ship.element.style.left = "0px";
      * return {void}
      */
     document.querySelector('main').addEventListener('crash', function () {
+      ship.velocity = 0;
 
         // What might you need/want to do in here?
 
     });
 
-    /**
-     * This is the primary "game loop"... in traditional game development, things
-     * happen in a loop like this. This function will execute every 20 milliseconds
-     * in order to do various things. For example, this is when all game entities
-     * (ships, etc) should be moved, and also when things like hit detection happen.
-     *
-     * @return {void}
-     */
     function gameLoop() {
         var move = getShipMovement(ship.velocity, ship.angle);
-        // console.log(ship.element.style.top + " before");
         ship.element.style.top = (parseInt(ship.element.style.top) - move.top) + "px";
         ship.element.style.left = (parseInt(ship.element.style.left) + move.left) + "px";
-        // console.log(ship.element.style.top + " after");
-        // Move the ship!
 
-
-        // Time to check for any collisions (see below)...
-        checkForCollisions();
+        checkForCollisions(ship.element.getBoundingClientRect(), asteroidz);
     }
 
     /**
@@ -121,11 +99,20 @@ ship.element.style.left = "0px";
      *
      * @return void
      */
-    function checkForCollisions() {
-
-        // Implement me!
+    function checkForCollisions(ship, aPos) {
+      for (var i = 0; i < asteroidz.length; i++) {
+        var asteroidposition = aPos[i].getBoundingClientRect();
+        if(!(asteroidposition.left > ship.right ||
+            asteroidposition.right < ship.left ||
+            asteroidposition.top > ship.bottom ||
+            asteroidposition.bottom < ship.top)){
+               console.log("crash");
+               crash(asteroidz[i]);
+            }
+      }
 
     }
+
 
 
     /** ************************************************************************
