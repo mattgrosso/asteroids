@@ -9,19 +9,11 @@ var ship = {
 
 var asteroidz = [];
 
-ship.element.style.top = "0px";
+ship.element.style.top = "25px";
 ship.element.style.left = "0px";
-console.log(ship);
 
     ship.element.addEventListener('asteroidDetected', function (event) {
       asteroidz.push(event.detail);
-      // console.log(asteroidz);
-
-        // You can detect when a new asteroid appears with this event.
-        // The new HTML element will be in event.detail
-
-        // What might you need/want to do in here?
-
     });
 
     function handleKeys(event) {
@@ -60,8 +52,6 @@ console.log(ship);
 
     }
 
-
-
     document.querySelector('body').addEventListener('keyup', handleKeys);
 
     /**
@@ -72,9 +62,6 @@ console.log(ship);
      */
     document.querySelector('main').addEventListener('crash', function () {
       ship.velocity = 0;
-
-        // What might you need/want to do in here?
-
     });
 
     function gameLoop() {
@@ -83,22 +70,20 @@ console.log(ship);
         ship.element.style.left = (parseInt(ship.element.style.left) + move.left) + "px";
 
         checkForCollisions(ship.element.getBoundingClientRect(), asteroidz);
+
+        console.log(window.innerWidth + " innerWidth");
+        console.log(window.innerHeight + " innerHeight");
+        if(parseInt(ship.element.style.top) < 0){
+          ship.element.style.top = window.innerHeight + "px";
+        } else if (parseInt(ship.element.style.left) < 0) {
+            ship.element.style.left = window.innerWidth + "px";
+        } else if (parseInt(ship.element.style.top) > window.innerHeight) {
+            ship.element.style.top = 1 + "px";
+        } else if (parseInt(ship.element.style.left) > window.innerWidth) {
+            ship.element.style.left = 1 + "px";
+        }
     }
 
-    /**
-     * This function checks for any collisions between asteroids and the ship.
-     * If a collision is detected, the crash method should be called with the
-     * asteroid that was hit:
-     *    crash(someAsteroidElement);
-     *
-     * You can get the bounding box of an element using:
-     *    someElement.getBoundingClientRect();
-     *
-     * A bounding box is an object with top, left, width, and height properties
-     * that you can use to detect whether one box is on top of another.
-     *
-     * @return void
-     */
     function checkForCollisions(ship, aPos) {
       for (var i = 0; i < asteroidz.length; i++) {
         var asteroidposition = aPos[i].getBoundingClientRect();
@@ -110,10 +95,7 @@ console.log(ship);
                crash(asteroidz[i]);
             }
       }
-
     }
-
-
 
     /** ************************************************************************
      *       These functions and code are given to you. DO NOT ALTER THEM.
@@ -152,5 +134,7 @@ console.log(ship);
             top: (velocity * Math.cos(angle * Math.PI / 180))
         };
     }
+
+
 
 })();
