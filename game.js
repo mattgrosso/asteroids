@@ -8,9 +8,9 @@ var ship = {
 };
 
 var asteroidz = [];
-
-ship.element.style.top = "25px";
-ship.element.style.left = "0px";
+console.log(ship.element.style);
+ship.element.style.top = (window.innerHeight/2) + "px";
+ship.element.style.left = (window.innerWidth/2) + "px";
 
     ship.element.addEventListener('asteroidDetected', function (event) {
       asteroidz.push(event.detail);
@@ -19,7 +19,7 @@ ship.element.style.left = "0px";
     function handleKeys(event) {
         console.log(event.keyCode);
         if (event.keyCode === 38){
-          if (ship.velocity >= 10){
+          if (ship.velocity >= 20){
             ship.velocity = 10;
             console.log(ship.velocity);
           }
